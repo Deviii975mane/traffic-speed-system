@@ -3,30 +3,23 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+
         Scanner sc = new Scanner(System.in);
 
-        System.out.print("Enter traffic level (low/medium/high): ");
+        System.out.print("Enter traffic level: ");
         String traffic = sc.nextLine();
 
-        System.out.print("Enter car speed: ");
+        System.out.print("Enter speed: ");
         int speed = sc.nextInt();
 
-        int safeSpeed;
+        TrafficData data = new TrafficData(traffic, speed);
 
-        if (traffic.equalsIgnoreCase("high")) {
-            safeSpeed = 30;
-        } else if (traffic.equalsIgnoreCase("medium")) {
-            safeSpeed = 50;
-        } else {
-            safeSpeed = 70;
-        }
+        SpeedCalculator calc = new SpeedCalculator();
+
+        int safeSpeed = calc.getSafeSpeed(data.trafficLevel);
+        String status = calc.checkStatus(data.speed, safeSpeed);
 
         System.out.println("Safe Speed: " + safeSpeed);
-
-        if (speed > safeSpeed) {
-            System.out.println("Status: Overspeeding");
-        } else {
-            System.out.println("Status: Safe Driving");
-        }
+        System.out.println("Status: " + status);
     }
 }
