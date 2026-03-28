@@ -1,12 +1,19 @@
+
+import java.util.HashMap;
+
 public class SpeedCalculator {
 
+    HashMap<String, Integer> speedMap;
+
+    public SpeedCalculator() {
+        speedMap = new HashMap<>();
+        speedMap.put("high", 30);
+        speedMap.put("medium", 50);
+        speedMap.put("low", 70);
+    }
+
     public int getSafeSpeed(String traffic) {
-        if (traffic.equalsIgnoreCase("high"))
-            return 30;
-        else if (traffic.equalsIgnoreCase("medium"))
-            return 50;
-        else
-            return 70;
+        return speedMap.getOrDefault(traffic.toLowerCase(), 60);
     }
 
     public String checkStatus(int speed, int safeSpeed) {
