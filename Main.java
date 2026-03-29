@@ -1,6 +1,6 @@
-
 import java.util.Scanner;
-import java.util.ArrayList;
+import java.util.Queue;
+import java.util.LinkedList;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,12 +8,13 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         SpeedCalculator calc = new SpeedCalculator();
 
-        ArrayList<TrafficData> vehicles = new ArrayList<>();
+        Queue<TrafficData> vehicleQueue = new LinkedList<>();
 
         System.out.print("Enter number of vehicles: ");
         int n = sc.nextInt();
         sc.nextLine();
 
+        // INPUT PHASE
         for (int i = 1; i <= n; i++) {
             System.out.println("\nVehicle " + i);
 
@@ -25,24 +26,23 @@ public class Main {
             sc.nextLine();
 
             TrafficData data = new TrafficData(traffic, speed);
-            vehicles.add(data);
 
-            int safeSpeed = calc.getSafeSpeed(data.trafficLevel);
-            String status = calc.checkStatus(data.speed, safeSpeed);
-
-            System.out.println("Safe Speed: " + safeSpeed);
-            System.out.println("Status: " + status);
+            vehicleQueue.add(data); // ADD TO QUEUE
         }
 
-        System.out.println("\n--- SUMMARY ---");
+        // PROCESSING PHASE
+        System.out.println("\n--- PROCESSING VEHICLES ---");
 
-        for (TrafficData v : vehicles) {
+        while (!vehicleQueue.isEmpty()) {
+            TrafficData v = vehicleQueue.poll(); // REMOVE ONE BY ONE
+
             int safeSpeed = calc.getSafeSpeed(v.trafficLevel);
             String status = calc.checkStatus(v.speed, safeSpeed);
 
             System.out.println(
                     "Traffic: " + v.trafficLevel +
                             ", Speed: " + v.speed +
+                            ", Safe Speed: " + safeSpeed +
                             ", Status: " + status);
         }
 
