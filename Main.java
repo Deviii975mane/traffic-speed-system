@@ -1,40 +1,46 @@
-import java.util.Scanner;
+
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
         SpeedCalculator calc = new SpeedCalculator();
-
         Queue<TrafficData> vehicleQueue = new LinkedList<>();
 
-        System.out.print("Enter number of vehicles: ");
+        Scanner sc = new Scanner(System.in);
+        Random rand = new Random();
+
+        String[] trafficLevels = { "low", "medium", "high" };
+
+        System.out.print("Enter number of vehicles to simulate: ");
         int n = sc.nextInt();
-        sc.nextLine();
 
-        // INPUT PHASE
+        System.out.println("\nGenerating vehicle data automatically...\n");
+
+        // GENERATE DATA
         for (int i = 1; i <= n; i++) {
-            System.out.println("\nVehicle " + i);
 
-            System.out.print("Enter traffic level: ");
-            String traffic = sc.nextLine();
-
-            System.out.print("Enter speed: ");
-            int speed = sc.nextInt();
-            sc.nextLine();
+            String traffic = trafficLevels[rand.nextInt(3)];
+            int speed = rand.nextInt(100);
 
             TrafficData data = new TrafficData(traffic, speed);
 
-            vehicleQueue.add(data); // ADD TO QUEUE
+            System.out.println(
+                    "Vehicle " + i +
+                            " → Traffic: " + traffic +
+                            ", Speed: " + speed);
+
+            vehicleQueue.add(data);
         }
 
-        // PROCESSING PHASE
+        // PROCESS QUEUE
         System.out.println("\n--- PROCESSING VEHICLES ---");
 
         while (!vehicleQueue.isEmpty()) {
-            TrafficData v = vehicleQueue.poll(); // REMOVE ONE BY ONE
+            TrafficData v = vehicleQueue.poll();
 
             int safeSpeed = calc.getSafeSpeed(v.trafficLevel);
             String status = calc.checkStatus(v.speed, safeSpeed);
