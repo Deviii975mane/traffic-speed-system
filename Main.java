@@ -1,43 +1,42 @@
 
 import java.util.Queue;
 import java.util.LinkedList;
-import java.util.Random;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
 
         SpeedCalculator calc = new SpeedCalculator();
+        TrafficAPIService api = new TrafficAPIService();
+
         Queue<TrafficData> vehicleQueue = new LinkedList<>();
 
-        Scanner sc = new Scanner(System.in);
-        Random rand = new Random();
+        System.out.println("Fetching data from API...\n");
 
-        String[] trafficLevels = { "low", "medium", "high" };
+        // CALL API
+        String apiData = api.getTrafficData();
 
-        System.out.print("Enter number of vehicles to simulate: ");
-        int n = sc.nextInt();
+        System.out.println("API Response: " + apiData);
 
-        System.out.println("\nGenerating vehicle data automatically...\n");
+        // CONVERT API DATA → TRAFFIC LEVEL (DUMMY LOGIC)
+        String traffic;
 
-        // GENERATE DATA
-        for (int i = 1; i <= n; i++) {
-
-            String traffic = trafficLevels[rand.nextInt(3)];
-            int speed = rand.nextInt(100);
-
-            TrafficData data = new TrafficData(traffic, speed);
-
-            System.out.println(
-                    "Vehicle " + i +
-                            " → Traffic: " + traffic +
-                            ", Speed: " + speed);
-
-            vehicleQueue.add(data);
+        if (apiData != null && apiData.contains("age")) {
+            traffic = "medium";
+        } else {
+            traffic = "low";
         }
 
+        // TEMP SPEED (until real data comes)
+        int speed = 60;
+
+        // CREATE OBJECT
+        TrafficData data = new TrafficData(traffic, speed);
+
+        // ADD TO QUEUE
+        vehicleQueue.add(data);
+
         // PROCESS QUEUE
-        System.out.println("\n--- PROCESSING VEHICLES ---");
+        System.out.println("\n--- PROCESSING VEHICLE ---");
 
         while (!vehicleQueue.isEmpty()) {
             TrafficData v = vehicleQueue.poll();
@@ -51,7 +50,5 @@ public class Main {
                             ", Safe Speed: " + safeSpeed +
                             ", Status: " + status);
         }
-
-        sc.close();
     }
 }
