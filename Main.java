@@ -2,6 +2,9 @@
 import java.util.Queue;
 import java.util.LinkedList;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 public class Main {
     public static void main(String[] args) {
 
@@ -12,30 +15,29 @@ public class Main {
 
         System.out.println("Fetching data from API...\n");
 
-        // CALL API
         String apiData = api.getTrafficData();
-
         System.out.println("API Response: " + apiData);
 
-        // CONVERT API DATA → TRAFFIC LEVEL (DUMMY LOGIC)
+        // JSON PARSING
+        JsonObject obj = JsonParser.parseString(apiData).getAsJsonObject();
+        int age = obj.get("age").getAsInt();
+
+        // LOGIC
         String traffic;
 
-        if (apiData != null && apiData.contains("age")) {
+        if (age > 50) {
+            traffic = "high";
+        } else if (age > 30) {
             traffic = "medium";
         } else {
             traffic = "low";
         }
 
-        // TEMP SPEED (until real data comes)
         int speed = 60;
 
-        // CREATE OBJECT
         TrafficData data = new TrafficData(traffic, speed);
-
-        // ADD TO QUEUE
         vehicleQueue.add(data);
 
-        // PROCESS QUEUE
         System.out.println("\n--- PROCESSING VEHICLE ---");
 
         while (!vehicleQueue.isEmpty()) {
